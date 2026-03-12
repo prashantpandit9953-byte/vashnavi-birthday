@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Vashnavi 🎂</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ff5f8a,#ff99ac);
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+}
+
+.container{
+z-index:10;
+}
+
+.gift{
+font-size:110px;
+cursor:pointer;
+animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+0%{transform:translateY(0)}
+50%{transform:translateY(-20px)}
+100%{transform:translateY(0)}
+}
+
+#content{
+display:none;
+}
+
+/* slideshow */
+
+.slideshow{
+width:240px;
+height:300px;
+margin:auto;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+.slideshow img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* cake */
+
+.cake{
+font-size:70px;
+animation:bounce 2s infinite;
+}
+
+#message{
+font-size:1.3rem;
+margin-top:10px;
+min-height:70px;
+}
+
+/* balloons */
+
+.balloon{
+position:absolute;
+bottom:-100px;
+font-size:40px;
+animation:float 10s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+/* hearts */
+
+.heart{
+position:absolute;
+font-size:25px;
+animation:fall 6s linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh)}
+100%{transform:translateY(110vh)}
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="giftBox" class="gift" onclick="openGift()">🎁</div>
+
+<div id="content">
+
+<h1>🎉 Happy Birthday Vashnavi 🎉</h1>
+
+<div class="cake">🎂</div>
+
+<div class="slideshow">
+<img id="slide" src="v1.jpg">
+</div>
+
+<p id="message"></p>
+
+</div>
+
+</div>
+
+<canvas id="confetti"></canvas>
+
+<audio id="music">
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6e5b6fdb3e.mp3?filename=happy-birthday-to-you-piano-version-13976.mp3">
+</audio>
+
+<script>
+
+/* typing message */
+
+const text="Vashnavi you are best 💖. I wish your life is full of happiness, success and beautiful memories. Happy Birthday!";
+let i=0;
+
+function typeMessage(){
+if(i<text.length){
+document.getElementById("message").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typeMessage,50);
+}
+}
+
+/* slideshow */
+
+const images=["v1.jpg","v2.jpg","v3.jpg","v4.jpg"];
+let index=0;
+
+function changeSlide(){
+index++;
+if(index>=images.length) index=0;
+document.getElementById("slide").src=images[index];
+}
+
+setInterval(changeSlide,2500);
+
+/* balloons */
+
+function createBalloon(){
+const b=document.createElement("div");
+b.className="balloon";
+b.style.left=Math.random()*100+"vw";
+b.innerHTML="🎈";
+document.body.appendChild(b);
+setTimeout(()=>{b.remove()},10000);
+}
+
+setInterval(createBalloon,900);
+
+/* hearts */
+
+function createHeart(){
+const h=document.createElement("div");
+h.className="heart";
+h.style.left=Math.random()*100+"vw";
+h.innerHTML="❤️";
+document.body.appendChild(h);
+setTimeout(()=>{h.remove()},6000);
+}
+
+setInterval(createHeart,500);
+
+/* confetti */
+
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function startConfetti(){
+for(let i=0;i<300;i++){
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height-canvas.height,
+size:Math.random()*8+4,
+speed:Math.random()*3+2,
+color:`hsl(${Math.random()*360},100%,50%)`
+});
+}
+}
+
+function update(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+pieces.forEach(p=>{
+p.y+=p.speed;
+if(p.y>canvas.height)p.y=-10;
+
+ctx.fillStyle=p.color;
+ctx.fillRect(p.x,p.y,p.size,p.size);
+});
+
+requestAnimationFrame(update);
+}
+
+update();
+
+/* open gift */
+
+function openGift(){
+
+document.getElementById("giftBox").style.display="none";
+
+document.getElementById("content").style.display="block";
+
+startConfetti();
+
+typeMessage();
+
+document.getElementById("music").play();
+
+}
+
+</script>
+
+</body>
+</html>
